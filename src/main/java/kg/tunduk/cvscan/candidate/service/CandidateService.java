@@ -7,6 +7,7 @@ import kg.tunduk.cvscan.candidate.dto.StatusHistoryEntry;
 import kg.tunduk.cvscan.candidate.dto.event.CvParsedEvent;
 import kg.tunduk.cvscan.candidate.exception.CandidateNotFoundException;
 import kg.tunduk.cvscan.candidate.exception.DuplicateEmailException;
+import kg.tunduk.cvscan.candidate.messaging.StatusChangedProducer;
 import kg.tunduk.cvscan.candidate.model.Candidate;
 import kg.tunduk.cvscan.candidate.model.CandidateStatus;
 import kg.tunduk.cvscan.candidate.model.StatusHistory;
@@ -29,14 +30,18 @@ public class CandidateService {
     private final CandidateRepository candidateRepository;
     private final StatusService statusService;
     private final CandidateMapper mapper;
+    private final StatusChangedProducer statusChangedProducer;
 
     public CandidateService(
             CandidateRepository candidateRepository,
             StatusService statusService,
-            CandidateMapper mapper) {
+            CandidateMapper mapper,
+            StatusChangedProducer statusChangedProducer
+            ) {
         this.candidateRepository = candidateRepository;
         this.statusService = statusService;
         this.mapper = mapper;
+        this.statusChangedProducer = statusChangedProducer;
     }
 
     @Transactional(readOnly = true)
@@ -152,7 +157,7 @@ public class CandidateService {
         candidateRepository.save(candidate);
 
         statusService.recordTransition(id, current, newStatus, comment);
-        //statusChangedProducer.publish(id, current, newStatus);
+        statusChangedProducer.publish(id, current, newStatus);
 
         return mapper.toResponse(candidate);
     }
