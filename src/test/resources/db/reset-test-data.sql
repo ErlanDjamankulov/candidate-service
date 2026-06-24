@@ -1,0 +1,144 @@
+-- Очистка перед каждым тестом и заполнение первоначальными тестовыми данными
+TRUNCATE TABLE candidate_status_history, candidates CASCADE;
+
+-- 13 кандидатов: смесь FIT / PARTIAL / NO_FIT, разные статусы для проверки фильтрации, пагинации и истории.
+
+INSERT INTO candidates (id, name, email, phone, position, pos_label, city, telegram, total_exp, stack, education, verdict, summary, status, criteria, experience, questions, parsed_at, created_at, updated_at)
+VALUES
+('asanov-bakyt', 'Асанов Бакыт Эркинович', 'asanov.bakyt@email.com', '+996 700 111222', 'java-middle', 'Java — ведущий программист', 'Бишкек', '@asanov_dev', '~4 г.',
+ 'Java 17, Spring Boot 3, PostgreSQL, Kafka, Testcontainers, Gradle, Docker', 'КГТУ им. Раззакова, ИТ, 2021', 'FIT',
+ 'Backend-разработчик с 4 годами коммерческого опыта на Java. Уверенно работает со Spring Boot 3, PostgreSQL, Kafka.',
+ 'APPROVED',
+ '[{"key":"java_spring","result":"OK","comment":"Java 17, Spring Boot 3 — 4 года"},{"key":"postgres","result":"OK","comment":"PostgreSQL — основная БД"},{"key":"kafka","result":"OK","comment":"Kafka — продюсеры, консьюмеры"}]',
+ '[{"period":"2023-03 — н.в.","company":"ПКБ «Финтех KG»","title":"Java Developer","duration":"~2 г."}]',
+ '["Kafka: как настраивали consumer group?"]',
+ '2026-05-10T09:00:00Z', '2026-05-10T09:05:00Z', '2026-05-18T10:00:00Z'),
+
+('mamytov-erlan', 'Мамытов Эрлан Сейткалиевич', 'mamytov.erlan@email.com', '+996 550 223344', 'java-middle', 'Java — ведущий программист', 'Бишкек', '@erlan_java', '~3.5 г.',
+ 'Java 17, Spring Boot 3, Spring Data JPA, PostgreSQL, REST API, JUnit5, Docker Compose', 'КНУ им. Баласагына, Информатика, 2022', 'FIT',
+ 'Разработчик с опытом 3.5 года. Специализируется на REST API и Spring Boot.',
+ 'INVITED',
+ '[{"key":"java_spring","result":"OK","comment":"Java 17, Spring Boot 3 — 3.5 года"},{"key":"postgres","result":"OK","comment":"PostgreSQL — глубокий опыт"},{"key":"kafka","result":"PARTIAL","comment":"Kafka — базовое знакомство"}]',
+ '[{"period":"2022-09 — н.в.","company":"Mbank","title":"Java Developer","duration":"~2.7 г."}]',
+ '["Liquibase vs Flyway: различия?"]',
+ '2026-05-11T10:15:00Z', '2026-05-11T10:20:00Z', '2026-05-19T11:00:00Z'),
+
+('omorov-ruslan', 'Оморов Руслан Кубанычбекович', 'omorov.ruslan@email.com', '+996 700 334455', 'java-middle', 'Java — ведущий программист', 'Бишкек', '@ruslan_backend', '~5 г.',
+ 'Java 11/17, Spring Boot, Spring Cloud, Kafka, PostgreSQL, Redis, Docker, Kubernetes, Flyway', 'АУЦА, CS, 2020', 'FIT',
+ 'Опытный backend-разработчик с 5 годами в микросервисной архитектуре. Kafka — продакшн-опыт.',
+ 'IN_REVIEW',
+ '[{"key":"java_spring","result":"OK","comment":"5 лет, включая Spring Cloud"},{"key":"kafka","result":"OK","comment":"Kafka — продюсеры, консьюмеры, DLQ"}]',
+ '[{"period":"2022-01 — н.в.","company":"Doodoc","title":"Senior Java Developer","duration":"~3.5 г."}]',
+ '["Kubernetes: какие сервисы разворачивали?"]',
+ '2026-05-12T08:30:00Z', '2026-05-12T08:35:00Z', '2026-05-12T08:35:00Z'),
+
+('tilekov-aibek', 'Тилеков Айбек Мирланович', 'tilekov.aibek@email.com', '+996 502 445566', 'java-middle', 'Java — ведущий программист', 'Ош', '@aibek_dev', '~3 г.',
+ 'Java 17, Spring Boot 3, PostgreSQL, Flyway, Mockito, Gradle, REST API, OpenAPI', 'ОшТУ, ИТ, 2022', 'FIT',
+ 'Backend-разработчик из Оша, 3 года опыта. Хорошо понимает контрактное API.',
+ 'NEW',
+ '[{"key":"java_spring","result":"OK","comment":"3 года"},{"key":"migrations","result":"OK","comment":"Flyway — миграции и rollback"}]',
+ '[{"period":"2023-01 — н.в.","company":"GovTech KG","title":"Java Developer","duration":"~2 г."}]',
+ '["OpenAPI: code-first или spec-first?"]',
+ '2026-05-12T14:00:00Z', '2026-05-12T14:05:00Z', '2026-05-12T14:05:00Z'),
+
+('kadyrov-nurbol', 'Кадыров Нурбол Бектурович', 'kadyrov.nurbol@email.com', '+996 777 556677', 'java-middle', 'Java — ведущий программист', 'Бишкек', '@nurbol_java', '~4 г.',
+ 'Java 17, Spring Boot 3, REST API, PostgreSQL, JUnit5, Testcontainers, Gradle, Docker', 'КГТУ, АИТ, 2021', 'FIT',
+ 'Разработчик с 4 годами на Java/Spring Boot. Testcontainers — использует регулярно.',
+ 'REJECTED',
+ '[{"key":"kafka","result":"NO","comment":"Kafka — не указана в резюме"},{"key":"tests","result":"OK","comment":"JUnit5, Testcontainers"}]',
+ '[{"period":"2022-04 — н.в.","company":"Компания Альфа","title":"Java Developer","duration":"~3 г."}]',
+ '["Kafka: готовы изучать?"]',
+ '2026-05-13T09:45:00Z', '2026-05-13T09:50:00Z', '2026-05-20T09:00:00Z'),
+
+('zhaparov-timur', 'Жапаров Тимур Алмазбекович', 'zhaparov.timur@email.com', '+996 700 667788', 'java-middle', 'Java — ведущий программист', 'Бишкек', '@timur_j', '~3 г.',
+ 'Java 11, Spring Boot 2, MySQL, REST API, JUnit5, Maven, Hibernate', 'КНУ, Математика, 2022', 'PARTIAL',
+ 'Backend-разработчик с 3 годами опыта. Использовал MySQL вместо PostgreSQL.',
+ 'NEW',
+ '[{"key":"postgres","result":"PARTIAL","comment":"MySQL — основная БД"},{"key":"gradle","result":"NO","comment":"Только Maven"}]',
+ '[{"period":"2023-02 — н.в.","company":"WebSolutions","title":"Java Developer","duration":"~2 г."}]',
+ '["PostgreSQL: как быстро перейдёте с MySQL?"]',
+ '2026-05-13T11:20:00Z', '2026-05-13T11:25:00Z', '2026-05-13T11:25:00Z'),
+
+('kubatov-daniyar', 'Кубатов Данияр Айбекович', 'kubatov.daniyar@email.com', '+996 550 778899', 'java-middle', 'Java — ведущий программист', 'Бишкек', '@daniyar_k', '~2 г.',
+ 'Java 17, Spring Boot 3, PostgreSQL, REST API, Gradle, Docker', 'АУЦА, CS, 2023', 'PARTIAL',
+ 'Молодой разработчик с 2 годами опыта. Тесты практически не пишет.',
+ 'IN_REVIEW',
+ '[{"key":"tests","result":"PARTIAL","comment":"Тесты пишет редко"},{"key":"migrations","result":"NO","comment":"Не упоминает"}]',
+ '[{"period":"2024-01 — н.в.","company":"DigitalKG","title":"Java Developer","duration":"~1.5 г."}]',
+ '["Почему тестов мало в резюме?"]',
+ '2026-05-14T09:00:00Z', '2026-05-14T09:05:00Z', '2026-05-14T09:05:00Z'),
+
+('borbiev-almaz', 'Борбиев Алмаз Токтосунович', 'borbiev.almaz@email.com', '+996 702 889900', 'java-middle', 'Java — ведущий программист', 'Жалал-Абад', '@almaz_b', '~3 г.',
+ 'Java 17, Spring Boot, PostgreSQL, JUnit5, Mockito, Flyway, Gradle', 'ЖАУ, ИТ, 2022', 'PARTIAL',
+ 'Backend-разработчик с 3 годами опыта в монолитной архитектуре. Опыта с Kafka нет.',
+ 'NEW',
+ '[{"key":"kafka","result":"NO","comment":"Только монолитные проекты"},{"key":"migrations","result":"OK","comment":"Flyway — использует"}]',
+ '[{"period":"2022-10 — н.в.","company":"GovIS KG","title":"Java Developer","duration":"~2.5 г."}]',
+ '["Микросервисы: готовы перейти от монолита?"]',
+ '2026-05-14T13:30:00Z', '2026-05-14T13:35:00Z', '2026-05-14T13:35:00Z'),
+
+('usupov-marat', 'Усупов Марат Бакытбекович', 'usupov.marat@email.com', '+996 700 990011', 'java-middle', 'Java — ведущий программист', 'Бишкек', '@marat_dev', '~2.5 г.',
+ 'Java 17, Spring Boot 3, PostgreSQL, Kafka, REST API, Gradle, JUnit5', 'КРСУ, ИСТ, 2023', 'PARTIAL',
+ 'Разработчик с 2.5 годами опыта. Kafka — только продюсер в проде.',
+ 'REJECTED',
+ '[{"key":"kafka","result":"PARTIAL","comment":"Продюсер в проде, консьюмер один раз"},{"key":"tests","result":"PARTIAL","comment":"Только happy path"}]',
+ '[{"period":"2023-07 — н.в.","company":"ФинансТех","title":"Java Developer","duration":"~1.5 г."}]',
+ '["Kafka consumer: опишите сценарий"]',
+ '2026-05-15T10:00:00Z', '2026-05-15T10:05:00Z', '2026-05-21T08:00:00Z'),
+
+('musaev-azamat', 'Мусаев Азамат Нурланович', 'musaev.azamat@email.com', '+996 550 112233', 'java-middle', 'Java — ведущий программист', 'Бишкек', '@azamat_m', '~3 г.',
+ 'Java 8, Spring 5, PostgreSQL, REST API, Maven, Hibernate, JUnit4', 'КНУ, Математика, 2022', 'PARTIAL',
+ 'Разработчик с 3 годами опыта на устаревшем стеке Java 8 / Spring 5.',
+ 'NEW',
+ '[{"key":"java_spring","result":"PARTIAL","comment":"Java 8, Spring 5 — устаревший стек"},{"key":"gradle","result":"NO","comment":"Только Maven"}]',
+ '[{"period":"2022-06 — н.в.","company":"Госпредприятие ИТ","title":"Java Developer","duration":"~3 г."}]',
+ '["Java 17: планируете переходить?"]',
+ '2026-05-15T14:45:00Z', '2026-05-15T14:50:00Z', '2026-05-15T14:50:00Z'),
+
+('sydykov-bekzat', 'Сыдыков Бекзат Маратович', 'sydykov.bekzat@email.com', '+996 700 223344', 'java-middle', 'Java — ведущий программист', 'Бишкек', '@bekzat_s', '~2 г.',
+ 'Java 17, Spring Boot 3, PostgreSQL, Gradle, REST API, Docker', 'АУЦА, CS, 2024', 'PARTIAL',
+ 'Выпускник с 2 годами опыта. Тесты и миграции — минимальный опыт.',
+ 'NEW',
+ '[{"key":"tests","result":"PARTIAL","comment":"Без примеров"},{"key":"migrations","result":"NO","comment":"Не упоминает"}]',
+ '[{"period":"2024-03 — н.в.","company":"TechStart KG","title":"Java Developer","duration":"~1.3 г."}]',
+ '["Напишите пример unit-теста"]',
+ '2026-05-16T09:15:00Z', '2026-05-16T09:20:00Z', '2026-05-16T09:20:00Z'),
+
+('kydyraliev-nurzat', 'Кыдыралиев Нурзат Бакытович', 'kydyraliev.nurzat@email.com', '+996 550 334455', 'java-middle', 'Java — ведущий программист', 'Бишкек', '@nurzat_k', '~1 г.',
+ 'Java 11, Spring MVC, MySQL, Maven, JSP', 'КГТУ, ИТ, 2025', 'NO_FIT',
+ 'Начинающий разработчик с 1 годом опыта. Стек устаревший.',
+ 'NEW',
+ '[{"key":"java_spring","result":"PARTIAL","comment":"Spring MVC, без Spring Boot"},{"key":"postgres","result":"NO","comment":"Только MySQL"}]',
+ '[{"period":"2025-01 — н.в.","company":"Небольшая веб-студия","title":"Junior Java","duration":"~0.5 г."}]',
+ '[]',
+ '2026-05-16T13:00:00Z', '2026-05-16T13:05:00Z', '2026-05-16T13:05:00Z'),
+
+('baimatov-erik', 'Байматов Эрик Жамшитович', 'baimatov.erik@email.com', '+996 502 556677', 'java-middle', 'Java — ведущий программист', 'Бишкек', '@erik_b', '~1 г.',
+ 'Python, Django, FastAPI, PostgreSQL, Docker', 'АУЦА, CS, 2025', 'NO_FIT',
+ 'Разработчик преимущественно на Python/Django. Коммерческого опыта на Java нет.',
+ 'NEW',
+ '[{"key":"java_spring","result":"NO","comment":"Только университетский курс"},{"key":"postgres","result":"OK","comment":"Хороший опыт в Python-проектах"}]',
+ '[{"period":"2024-09 — н.в.","company":"DataAnalytics KG","title":"Python Developer","duration":"~0.8 г."}]',
+ '[]',
+ '2026-05-17T14:15:00Z', '2026-05-17T14:20:00Z', '2026-05-17T14:20:00Z');
+
+-- История статусов для кандидатов с продвинутыми статусами (соответствует переходам выше)
+
+INSERT INTO candidate_status_history (id, candidate_id, from_status, to_status, comment, changed_at) VALUES
+(gen_random_uuid(), 'asanov-bakyt', 'NEW', 'IN_REVIEW', 'Хороший стек, берём в работу', '2026-05-15T10:00:00Z'),
+(gen_random_uuid(), 'asanov-bakyt', 'IN_REVIEW', 'INVITED', 'Назначено собеседование', '2026-05-16T10:00:00Z'),
+(gen_random_uuid(), 'asanov-bakyt', 'INVITED', 'APPROVED', 'Прошёл собеседование успешно', '2026-05-18T10:00:00Z'),
+
+(gen_random_uuid(), 'mamytov-erlan', 'NEW', 'IN_REVIEW', NULL, '2026-05-17T11:00:00Z'),
+(gen_random_uuid(), 'mamytov-erlan', 'IN_REVIEW', 'INVITED', 'Подходит по стеку', '2026-05-19T11:00:00Z'),
+
+(gen_random_uuid(), 'omorov-ruslan', 'NEW', 'IN_REVIEW', 'Сильный кандидат, приоритет', '2026-05-12T08:35:00Z'),
+
+(gen_random_uuid(), 'kadyrov-nurbol', 'NEW', 'IN_REVIEW', NULL, '2026-05-18T09:00:00Z'),
+(gen_random_uuid(), 'kadyrov-nurbol', 'IN_REVIEW', 'REJECTED', 'Нет опыта с Kafka', '2026-05-20T09:00:00Z'),
+
+(gen_random_uuid(), 'kubatov-daniyar', 'NEW', 'IN_REVIEW', NULL, '2026-05-14T09:05:00Z'),
+
+(gen_random_uuid(), 'usupov-marat', 'NEW', 'IN_REVIEW', NULL, '2026-05-15T10:05:00Z'),
+(gen_random_uuid(), 'usupov-marat', 'IN_REVIEW', 'INVITED', NULL, '2026-05-18T08:00:00Z'),
+(gen_random_uuid(), 'usupov-marat', 'INVITED', 'REJECTED', 'Слабые ответы на собеседовании', '2026-05-21T08:00:00Z');

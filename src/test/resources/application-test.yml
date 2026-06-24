@@ -1,0 +1,20 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+app:
+  kafka:
+    topics:
+      cv-parsed: cv.parsed
+      candidate-status-changed: candidate.status.changed
+
+logging:
+  level:
+    kg.tunduk.cvscan.candidate: DEBUG
+    org.testcontainers: INFO
